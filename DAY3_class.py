@@ -6,8 +6,6 @@ class Node:
 
 node = Node('root', Node('left', Node('left.left')), Node('right'))
 
-s = ""
-
 def serialize(node, s = ""):
     if not node:
         s += '* '
@@ -17,5 +15,27 @@ def serialize(node, s = ""):
     s = serialize(node.right, s)
     return s
 
+
+i = 0
+
+def deserialize(s):
+    global i
+    if s[i] == '*':
+        i += 2
+        return None
+    else:
+        space = s[i:].find(" ")
+        sp = space + i
+        node = Node(s[i:sp])
+        i = sp+1
+        node.left = deserialize(s)
+        node.right = deserialize(s)
+        return node
+
 print('After serialization : {}'.format(serialize(node)))
+assert deserialize(serialize(node)).left.left.val == 'left.left'
+i = 0
+x = deserialize(serialize(node))
+print(x.left.left.val)
+
 
